@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101114">
+  <title>Motora — Dealer Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="#"><span class="brand-icon">M</span><span>MOTORA<small>DEALER MANAGEMENT</small></span></a>
+    <div class="nav-label">MENU UTAMA</div>
+    <button class="nav-item active" data-page="dashboard">▦ <span>Dashboard</span></button>
+    <button class="nav-item" data-page="motor">▤ <span>Data Motor</span></button>
+    <button class="nav-item" data-page="transaksi">⇄ <span>Transaksi</span></button>
+    <button class="nav-item" data-page="laporan">▥ <span>Laporan</span></button>
+    <div class="sidebar-bottom">
+      <div class="profile"><div class="avatar">AD</div><div><b>Administrator</b><small>Pengelola Dealer</small></div></div>
+      <button id="resetBtn" class="reset-btn">↻ Reset data contoh</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle" aria-label="Buka menu">☰</button>
+      <div><div class="eyebrow">MANAJEMEN DEALER</div><h1 id="pageTitle">Dashboard</h1></div>
+      <div class="top-actions"><span class="live-dot"></span><span class="today" id="today"></span><button class="primary" id="quickAdd">＋ Transaksi</button></div>
+    </header>
+
+    <section class="page active" id="page-dashboard">
+      <div class="welcome"><div><div class="eyebrow">RINGKASAN BISNIS</div><h2>Selamat datang kembali 👋</h2><p>Pantau performa dealer Anda dalam satu tampilan.</p></div><div class="period"><label for="periodFilter">Periode</label><select id="periodFilter"><option value="all">Semua waktu</option><option value="month" selected>Bulan ini</option><option value="year">Tahun ini</option></select></div></div>
+      <div class="stats-grid">
+        <article class="stat-card"><div class="stat-top"><span>Total Penjualan</span><span class="stat-icon orange">↗</span></div><strong id="statUnits">0 <small>unit</small></strong><div class="stat-foot">Unit terjual pada periode terpilih</div></article>
+        <article class="stat-card"><div class="stat-top"><span>Total Omzet</span><span class="stat-icon blue">Rp</span></div><strong id="statRevenue">Rp0</strong><div class="stat-foot">Nilai seluruh transaksi</div></article>
+        <article class="stat-card"><div class="stat-top"><span>Estimasi Laba</span><span class="stat-icon green">↗</span></div><strong id="statProfit">Rp0</strong><div class="stat-foot">Omzet dikurangi modal</div></article>
+        <article class="stat-card"><div class="stat-top"><span>Stok Tersedia</span><span class="stat-icon purple">▤</span></div><strong id="statStock">0 <small>unit</small></strong><div class="stat-foot" id="stockFoot">Total stok seluruh motor</div></article>
+      </div>
+      <div class="content-grid">
+        <article class="panel chart-panel"><div class="panel-head"><div><h3>Tren Penjualan</h3><p>Performa penjualan bulanan</p></div><span class="tag">12 BULAN</span></div><div class="chart-wrap"><canvas id="salesChart" aria-label="Grafik penjualan bulanan"></canvas></div><div class="chart-legend"><span><i class="legend-dot"></i> Omzet penjualan</span><span><i class="legend-dot muted"></i> Unit terjual</span></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>Komposisi Merek</h3><p>Distribusi unit terjual</p></div></div><div id="brandChart" class="brand-chart"></div><div id="brandLegend" class="brand-legend"></div></article>
+      </div>
+      <div class="content-grid lower-grid">
+        <article class="panel"><div class="panel-head"><div><h3>Transaksi Terbaru</h3><p>Aktivitas penjualan terakhir</p></div><button class="text-btn" data-goto="transaksi">Lihat semua →</button></div><div class="table-wrap"><table><thead><tr><th>ID TRANSAKSI</th><th>MOTOR</th><th>TANGGAL</th><th>TOTAL</th></tr></thead><tbody id="recentTransactions"></tbody></table></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>Stok Menipis</h3><p>Motor yang perlu segera diisi</p></div><span class="warning-tag">PERHATIAN</span></div><div id="lowStockList" class="low-stock-list"></div></article>
+      </div>
+    </section>
+
+    <section class="page" id="page-motor">
+      <div class="section-intro"><div><h2>Data Motor</h2><p>Kelola katalog, harga, modal, dan ketersediaan unit.</p></div><button class="primary" id="addMotorBtn">＋ Tambah Motor</button></div>
+      <div class="toolbar"><input id="motorSearch" placeholder="Cari nama atau merek motor..." aria-label="Cari motor"><select id="brandFilter"><option value="">Semua merek</option></select><button class="secondary" id="exportMotor">↓ Ekspor CSV</button></div>
+      <div class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>MOTOR</th><th>MEREK</th><th>HARGA JUAL</th><th>MODAL/UNIT</th><th>STOK</th><th>TERJUAL</th><th>AKSI</th></tr></thead><tbody id="motorTable"></tbody></table></div><div class="table-footer" id="motorCount"></div></div>
+    </section>
+
+    <section class="page" id="page-transaksi">
+      <div class="section-intro"><div><h2>Transaksi Penjualan</h2><p>Catat penjualan dan pantau status pembayaran.</p></div><button class="primary" id="addTransactionBtn">＋ Tambah Transaksi</button></div>
+      <div class="toolbar"><input id="transactionSearch" placeholder="Cari ID atau nama motor..." aria-label="Cari transaksi"><input id="transactionDate" type="month" aria-label="Filter bulan transaksi"><button class="secondary" id="exportTransactions">↓ Ekspor CSV</button></div>
+      <div class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>ID TRANSAKSI</th><th>TANGGAL</th><th>PELANGGAN</th><th>MOTOR</th><th>QTY</th><th>TOTAL</th><th>STATUS</th><th>AKSI</th></tr></thead><tbody id="transactionTable"></tbody></table></div><div class="table-footer" id="transactionCount"></div></div>
+    </section>
+
+    <section class="page" id="page-laporan">
+      <div class="section-intro"><div><h2>Laporan Bisnis</h2><p>Ringkasan penjualan dan profitabilitas dealer.</p></div><button class="primary" id="exportReport">↓ Unduh Laporan CSV</button></div>
+      <div class="report-filters panel"><label>Dari tanggal<input id="reportStart" type="date"></label><label>Sampai tanggal<input id="reportEnd" type="date"></label><button class="secondary" id="applyReport">Terapkan Filter</button><button class="text-btn" id="clearReport">Reset</button></div>
+      <div class="stats-grid report-stats"><article class="stat-card"><div class="stat-top"><span>Unit Terjual</span><span class="stat-icon orange">↗</span></div><strong id="reportUnits">0</strong></article><article class="stat-card"><div class="stat-top"><span>Omzet</span><span class="stat-icon blue">Rp</span></div><strong id="reportRevenue">Rp0</strong></article><article class="stat-card"><div class="stat-top"><span>Estimasi Laba</span><span class="stat-icon green">↗</span></div><strong id="reportProfit">Rp0</strong></article><article class="stat-card"><div class="stat-top"><span>Transaksi</span><span class="stat-icon purple">⇄</span></div><strong id="reportCount">0</strong></article></div>
+      <article class="panel report-table"><div class="panel-head"><div><h3>Rincian Laporan</h3><p>Transaksi sesuai periode laporan</p></div></div><div class="table-wrap"><table><thead><tr><th>TANGGAL</th><th>ID</th><th>PELANGGAN</th><th>MOTOR</th><th>UNIT</th><th>OMZET</th><th>LABA</th></tr></thead><tbody id="reportTable"></tbody></table></div></article>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head"><div><div class="eyebrow">MANAJEMEN DATA</div><h2 id="modalTitle">Tambah data</h2></div><button class="close-btn" id="closeModal" aria-label="Tutup">×</button></div>
+      <form id="dataForm"><div id="formFields" class="form-grid"></div><div class="form-actions"><button type="button" class="secondary" id="cancelModal">Batal</button><button type="submit" class="primary">Simpan Data</button></div></form>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
